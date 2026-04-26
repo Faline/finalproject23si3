@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, redirect, url_for
 import json
 import os 
+import re
 
 app = Flask(__name__)
 
@@ -56,18 +57,23 @@ def register():
     email = data.get("email")
     password = data.get("password")
 
-    # bersihin spasi
-    if email:
-        email = email.strip()
-    if password:
-        password = password.strip()
+    # validasi spasi
+    if email.strip() == "":
+        return jsonify({"error": "Email tidak boleh kosong"}), 400
 
+    # validasi kosong
     if not email or not password:
         return jsonify({"error": "Email dan password wajib diisi"}), 400
 
+    # validasi password
     if len(password) < 6:
         return jsonify({"error": "Password minimal 6 karakter"}), 400
+    
+    # validasi format email
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"error": "Format email tidak valid"}), 400
 
+    # cek duplikat
     for user in users:
         if user["email"] == email:
             return jsonify({"error": "Email sudah terdaftar"}), 400
@@ -85,6 +91,9 @@ def register():
 def login():
     data = request.form or request.json
 
+    email = data.get("email")
+    password = data.get("password")
+
     for user in users:
         if user["email"] == data.get("email") and user["password"] == data.get("password"):
             
@@ -92,6 +101,8 @@ def login():
                 return redirect(url_for("profile"))
 
             return jsonify({"message": "Login success"}), 200
+    if request.form:
+        return "Login gagal"
 
     return jsonify({"error": "Login gagal"}), 401
 

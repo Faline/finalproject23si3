@@ -42,6 +42,11 @@ def test_register_whitespace_email():
     client = setup_client()
     res = client.post("/register", json={"email": " ", "password": "123456"})
     assert res.status_code == 400
+    
+def test_register_invalid_email():
+    client = setup_client()
+    res = client.post("/register", json={"email": "invalidemail", "password": "123456"})
+    assert res.status_code == 400
 
 def test_register_long_password():
     client = setup_client()
