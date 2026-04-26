@@ -57,22 +57,22 @@ def register():
     email = data.get("email")
     password = data.get("password")
 
-    # validasi spasi
-    if email.strip() == "":
-        return jsonify({"error": "Email tidak boleh kosong"}), 400
-
     # validasi kosong
     if not email or not password:
         return jsonify({"error": "Email dan password wajib diisi"}), 400
 
+    # validasi spasi
+    if email.strip() == "":
+        return jsonify({"error": "Email tidak boleh kosong"}), 400
+
+    # validasi format email
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        return jsonify({"error": "Format email tidak valid"}), 400
+    
     # validasi password
     if len(password) < 6:
         return jsonify({"error": "Password minimal 6 karakter"}), 400
     
-    # validasi format email
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        return jsonify({"error": "Format email tidak valid"}), 400
-
     # cek duplikat
     for user in users:
         if user["email"] == email:
