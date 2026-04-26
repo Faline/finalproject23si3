@@ -52,7 +52,7 @@ def register_page():
 # REGISTER
 @app.route("/register", methods=["POST"])
 def register():
-    data = request.form or request.json
+    data = request.form or request.json or {}
 
     email = data.get("email")
     password = data.get("password")
