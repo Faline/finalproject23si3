@@ -42,7 +42,7 @@ Pengujian dilakukan dengan menggunakan pytest-cov unruk mengukur tingkat coverag
 ### 4. Continuous Integration (CI)
 Aplikasi ini menggunakan GitHub Actions untuk menjalankan testing secara otomatis setiap kali terjadi:
 - Push
-- Pull request
+
 Pipeline CI mencakup:
 - Install dependencies
 - Menjalankan unit dan integration test
